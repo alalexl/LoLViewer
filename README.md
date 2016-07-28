@@ -1,6 +1,10 @@
 # LoLRotateDemo
 Rotate champion models
 
+- To run locally:
+- npm install http-server -g
+- http-server (inside the application folder)
+
 - want to load different stl files of different characters via dropdown selection and load button
 - buttons to customize rotation/orientation of champion
 - start with multiple character select, click on a champ and load in its own rotation, and a back button
