@@ -1,0 +1,16 @@
+{
+  "name": "gulpServer",
+  "version": "0.0.1",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "lodash": "^3.10.0"
+  },
+  "devDependencies": {
+    "gulp": "git+https://git@github.com/gulpjs/gulp.git#4.0",
+    "gulp-shell":"*",
+    "http-server": "*"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}
