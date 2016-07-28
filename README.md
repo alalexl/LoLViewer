@@ -2,9 +2,9 @@
 Rotate champion models
 
 ## To run locally:
-######npm install http-server -g 
-######-server (at root)
-###OR
+###### npm install http-server -g 
+###### http-server (at root)
+### OR:
 ###### npm install
 ###### gulp serve (at root)
 
