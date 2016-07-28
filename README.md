@@ -2,10 +2,11 @@
 Rotate champion models
 
 - To run locally:
-- npm install http-server -g
-- http-server (inside the application folder)
+- 1. npm install http-server -g
+- 2. http-server (inside the application folder)
 - OR
-- npm install > gulp serve
+- 1. npm install 
+- 2. gulp serve
 
 
 - want to load different stl files of different characters via dropdown selection and load button
