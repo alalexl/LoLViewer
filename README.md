@@ -1,6 +1,13 @@
 # LoLRotateDemo
 Rotate champion models
 
+## References
+
+- http://threejs.org/docs/index.html#Manual/Introduction/Creating_a_scene
+- https://github.com/mrdoob/three.js/wiki
+- http://threejs.org/examples/#canvas_geometry_cube
+- https://gist.github.com/bellbind/477817982584ac8473ef/
+
 - To run locally:
 - npm install http-server -g
 - http-server (inside the application folder)

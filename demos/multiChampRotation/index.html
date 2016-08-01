@@ -73,8 +73,14 @@
 				// ASCII file - SLOTTED DISK
 				var loader = new THREE.STLLoader();
 				//loader.load( './models/stl/ascii/slotted_disk.stl', function ( geometry ) {
-				loader.load( '../LoLChampModels/files/Ryze.stl', function ( geometry ) {
-					var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
+				loader.load( '../../LoLChampModels/files/Ryze.stl', function ( geometry ) {
+					var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200, shading: THREE.FlatShading } );
+					var material2 = new THREE.MeshPhongMaterial({
+                        shininess: 200,
+                        color: 0x6600FF,
+                        shading: THREE.FlatShading
+                    }
+                );
 					var mesh = new THREE.Mesh( geometry, material );
 					mesh.position.set( 0, - 0.25, 0.6 );
 					//mesh.rotation.set( 0, - Math.PI / 2, 0 );
@@ -88,7 +94,7 @@
 				// Binary files - FAT TILTED THING, GRAY
 				var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x111111, shininess: 200 } );
 				//loader.load( './models/stl/binary/pr2_head_pan.stl', function ( geometry ) {
-				loader.load( '../LoLChampModels/files/Ahri.stl', function ( geometry ) {
+				loader.load( '../../LoLChampModels/files/Ahri.stl', function ( geometry ) {
 					var mesh = new THREE.Mesh( geometry, material );
 					mesh.position.set( 0, - 0.37, - 0.6 );
 					mesh.rotation.set( - Math.PI / 2, 0, 0 );
@@ -99,7 +105,7 @@
 				} );
 
 				//loader.load( './models/stl/binary/pr2_head_tilt.stl', function ( geometry ) {
-				loader.load( '../LoLChampModels/files/LesserWraith.stl', function ( geometry ) {
+				loader.load( '../../LoLChampModels/files/LesserWraith.stl', function ( geometry ) {
 					var mesh = new THREE.Mesh( geometry, material );
 					//mesh.position.set( 0.136, - 0.37, - 0.6 );
 					mesh.position.set( - 0.7, - 0.37, - 0.2 );
@@ -112,7 +118,7 @@
 
 				// Colored binary STL - COLORED THING
 				//loader.load( './models/stl/binary/colored.stl', function ( geometry ) {
-				loader.load( '../LoLChampModels/files/Vladimir.stl', function ( geometry ) {
+				loader.load( '../../LoLChampModels/files/Vladimir.stl', function ( geometry ) {
 					var meshMaterial = material;
 					if (geometry.hasColors) {
 						meshMaterial = new THREE.MeshPhongMaterial({ opacity: geometry.alpha, vertexColors: THREE.VertexColors });
