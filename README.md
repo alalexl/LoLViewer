@@ -7,6 +7,7 @@ Rotate champion models
 - https://github.com/mrdoob/three.js/wiki
 - http://threejs.org/examples/#canvas_geometry_cube
 - https://gist.github.com/bellbind/477817982584ac8473ef/
+- http://lol3dmodels.deviantart.com/art/PROJECT-Zed-3D-Model-DL-557865041
 
 ## To run locally:
 ###### npm install http-server -g 
