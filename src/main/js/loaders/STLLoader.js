@@ -50,7 +50,7 @@ THREE.STLLoader.prototype = {
 		}, onProgress, onError );
 
 	},
-
+	
 	parse: function ( data ) {
 
 		var isBinary = function () {

@@ -7,7 +7,7 @@
 		<style>
 			body {
 				font-family: Monospace;
-				background-color: #000000;
+				background-color: #f0f0f0;
 				margin: 0px;
 				overflow: hidden;
 			}
@@ -35,6 +35,14 @@
 
 		<div id="info">
 			<a href="https://github.com/mrdoob/three.js" target="_blank">three.js</a> - LoL Champion Viewer by <a href="https://github.intel.com/leungale" target="_blank">leungale</a>
+			<br><br>
+			Pick a champion:
+			<select name="sel" onchange="chooseChamp(this.value)">
+				<option value="Ryze">Ryze</option>
+				<option value="Ahri">Ahri</option>
+				<option value="Teemo">Teemo</option>
+			</select>
+
 		</div>
 
 		<script src="../build/three.js"></script>
@@ -48,7 +56,11 @@
 				Detector.addGetWebGLMessage();
 			}
 
-			var scene, camera, renderer, container, stats;
+			var scene, camera, cameraTarget, renderer, container, stats;
+
+			var character, name;
+
+			var fileDir = '../../LoLChampModels/files/Ryze.stl';
 
 			var targetRotation = 0;
             var targetRotationOnMouseDown = 0;
@@ -66,10 +78,12 @@
 
 			function init() {
 
-				
-				camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 200 );
-				camera.position.set( 0, 10, 0 );
-				camera.lookAt( new THREE.Vector3( 0, 0, 0 ));
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 15 );
+				camera.position.set( 0, 0.7, 2.75 );
+				cameraTarget = new THREE.Vector3( 0, 0.3, 0);
 				
 				scene = new THREE.Scene();
 				scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
@@ -79,43 +93,76 @@
 					new THREE.PlaneBufferGeometry( 40, 40 ),
 					new THREE.MeshPhongMaterial( { color: 0x999999, specular: 0x101010 } )
 				);
-				plane.receiveShadow = true;
+				plane.rotation.x = - Math.PI/2;
+				plane.position.y = - 0.1;
 				scene.add( plane );
+				plane.receiveShadow = true;
 
 				//load STL file here
+				loadChamp(fileDir);
+
+				//lights
+				scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
+				addShadowedLight( 1, 1, 1, 0xffffff, 1.35 );
+
+				//renderer
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setClearColor( scene.fog.color );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.gammaInput = true;
+				renderer.gammaOutput = true;
+				renderer.shadowMap.enabled = true;
+				renderer.shadowMap.renderReverseSided = false;
+				container.appendChild( renderer.domElement );
+
+				//stats
+				stats = new Stats();
+				container.appendChild( stats.dom );
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+                document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+                document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+			}
+
+			function chooseChamp(name) {
+				if (name=="") {
+					return;
+				} else {
+					scene.remove(character);
+					if (name=="Ryze") {
+						loadChamp('../../LoLChampModels/files/Ryze.stl');
+					}
+					else if (name=="Ahri") {
+						loadChamp('../../LoLChampModels/files/Ahri.stl');
+					}
+					else if (name=="Teemo") {
+						loadChamp('../../LoLChampModels/files/Teemo.stl');
+					}
+				}
+			}
+
+			function loadChamp(fileDir) {
 				var loader = new THREE.STLLoader();
-				loader.load( '../../LoLChampModels/files/Ryze.stl', function ( geometry ) {
+				loader.load( fileDir, function ( geometry ) {
 					var material = new THREE.MeshPhongMaterial( {
 						color: 0x6600ff,
 						specular: 0x111111,
 						shininess: 200,
 						shading: THREE.FlatShading
 					} );
-					var mesh = new THREE.Mesh ( geometry, material );
-					mesh.scale.set( 0.005, 0.005, 0.005 );
-					mesh.rotation.z = rotationSpeed;
-					mesh.castShadow = true;
-					scene.add( mesh );
+					character = new THREE.Mesh ( geometry, material );
+					character.scale.set( 0.005, 0.005, 0.005 );
+					character.rotation.set( - Math.PI / 2 , 0, 0 );
+					character.castShadow = true;
+					scene.add( character );
+					name = fileDir.split('/').pop().split('.')[0];
 				} );
-
-				//lights
-				//scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
-
-
-				//renderer
-				renderer = new THREE.WebGLRenderer( { antialias: true } );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				document.body.appendChild( renderer.domElement );
-
-				//stats
-				stats = new Stats();
-				stats.domElement.style.position = 'aboslute';
-				stats.domElement.style.top = '0px';
-				document.body.appendChild( stats.domElement );
 			}
 
 			function addShadowedLight( x, y, z, color, intensity ) {
-
 				var directionalLight = new THREE.DirectionalLight( color, intensity );
 				directionalLight.position.set( x, y, z );
 				scene.add( directionalLight );
@@ -132,6 +179,67 @@
 				directionalLight.shadow.bias = -0.005;
 			}
 
+			function onWindowResize() {
+                windowHalfX = window.innerWidth / 2;
+                windowHalfY = window.innerHeight / 2;
+
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+
+                renderer.setSize( window.innerWidth, window.innerHeight );
+            }
+
+			function onDocumentMouseDown( event ) {
+                document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+                document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+                document.addEventListener( 'mouseout', onDocumentMouseOut, false );
+
+                mouseXOnMouseDown = event.clientX - windowHalfX;
+                targetRotationOnMouseDown = targetRotation;
+            }
+
+            function onDocumentMouseMove( event ) {
+                mouseX = event.clientX - windowHalfX;
+
+                targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
+                if (targetRotation > 1) {
+                        targetRotation = 1;
+                }
+                if (targetRotation < - 1) {
+                    targetRotation = - 1;
+                }
+            }
+
+            function onDocumentMouseUp( event ) {
+                document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+                document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+                document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+            }
+
+            function onDocumentMouseOut( event ) {
+                document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+                document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+                document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+            }
+
+            function onDocumentTouchStart( event ) {
+                if ( event.touches.length === 1 ) {
+                    event.preventDefault();
+
+                    mouseXOnMouseDown = event.touches[0].pageX - windowHalfX;
+                    targetRotationOnMouseDown = targetRotation;
+                }
+            }
+
+            function onDocumentTouchMove( event ) {
+                if ( event.touches.length === 1 ) {
+                    event.preventDefault();
+
+                    mouseX = event.touches[0].pageX - windowHalfx;
+                    targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.05;
+                }
+            }
+
 			function animate() {
 				requestAnimationFrame( animate );
 				render();
@@ -139,6 +247,10 @@
 			}
 
 			function render() {
+				if (character) {
+					character.rotateZ(rotationSpeed + (targetRotation * 0.05 ) );
+				}				
+				camera.lookAt( cameraTarget );
 				renderer.render( scene, camera );
 			}
 
