@@ -6,11 +6,15 @@ LoLRotateDemo
 ### Usage ###
 
 npm install
+
 gulp serve
+
 
 or:
 
+
 npm install http-server-g
+
 http-server
 
 ### References ###
