@@ -127,6 +127,9 @@
                 document.addEventListener( 'touchmove', onDocumentTouchMove, false );
 			}
 
+			/*
+			 * Replaces currently displayed champion with newly selected one
+			 */
 			function chooseChamp(name) {
 				if (name=="") {
 					return;
@@ -144,6 +147,9 @@
 				}
 			}
 
+			/*
+			 *
+			 */
 			function loadChamp(fileDir) {
 				var loader = new THREE.STLLoader();
 				loader.load( fileDir, function ( geometry ) {
@@ -198,6 +204,9 @@
                 targetRotationOnMouseDown = targetRotation;
             }
 
+            /*
+			 * Speed limit on targetRotation
+			 */
             function onDocumentMouseMove( event ) {
                 mouseX = event.clientX - windowHalfX;
 
@@ -246,6 +255,9 @@
 				stats.update();
 			}
 
+			/*
+			 * Updates rotation speed and focuses camera on champio
+			 */
 			function render() {
 				if (character) {
 					character.rotateZ(rotationSpeed + (targetRotation * 0.05 ) );
