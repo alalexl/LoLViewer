@@ -1,4 +1,4 @@
-LoLRotateDemo
+LoL Model Viewer
 =============
 
 #### Demo for smart toy champion models ####
